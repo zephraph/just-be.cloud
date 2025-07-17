@@ -1,5 +1,9 @@
-data
-node_modules
-.smallweb/repos
-.env
-.DS_Store
+# Ignore everything
+*
+
+# Don't ignore dotfiles
+!.*
+!.*/**/*
+!mise.toml
+
+.claude/*.local.json

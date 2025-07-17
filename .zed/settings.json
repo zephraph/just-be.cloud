@@ -1,0 +1,28 @@
+{
+  "languages": {
+    "TypeScript": {
+      "language_servers": ["deno", "!typescript-language-server"]
+    },
+    "JavaScript": {
+      "language_servers": ["deno", "!typescript-language-server"]
+    }
+  },
+  "lsp": {
+    "deno": {
+      "settings": {
+        "deno": {
+          "enable": true,
+          "lint": true,
+          "unstable": true,
+          "suggest": {
+            "imports": {
+              "hosts": {
+                "https://deno.land": true
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
