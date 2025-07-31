@@ -1,0 +1,11 @@
+.git
+.github
+.zed
+node_modules
+*.log
+.DS_Store
+.env.local
+.env.*.local
+DEPLOYMENT.md
+docker-compose.yml
+app.yaml

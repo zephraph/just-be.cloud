@@ -1,0 +1,10 @@
+services:
+  smallweb:
+    build: .
+    ports:
+      - "80:7777"
+    volumes:
+      - ./:/smallweb
+    environment:
+      - SMALLWEB_DOMAIN=just-be.cloud
+    restart: unless-stopped

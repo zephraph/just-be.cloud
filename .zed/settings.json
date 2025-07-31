@@ -1,10 +1,13 @@
 {
   "languages": {
     "TypeScript": {
-      "language_servers": ["deno", "!typescript-language-server"]
+      "language_servers": ["deno", "!typescript-language-server", "!biome"]
+    },
+    "TSX": {
+      "language_servers": ["deno", "!typescript-language-server", "!biome"]
     },
     "JavaScript": {
-      "language_servers": ["deno", "!typescript-language-server"]
+      "language_servers": ["deno", "!typescript-language-server", "!biome"]
     }
   },
   "lsp": {
@@ -13,14 +16,7 @@
         "deno": {
           "enable": true,
           "lint": true,
-          "unstable": true,
-          "suggest": {
-            "imports": {
-              "hosts": {
-                "https://deno.land": true
-              }
-            }
-          }
+          "unstable": ["raw-import"]
         }
       }
     }

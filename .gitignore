@@ -5,5 +5,10 @@
 !.*
 !.*/**/*
 !mise.toml
+!app.yaml
+!docker-compose.yml
+!Dockerfile
+!*.md
+!*.sh
 
 .claude/*.local.json

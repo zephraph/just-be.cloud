@@ -1,3 +1,5 @@
 {
-    "domain": "just-be.dev"
+  "$schema": "https://raw.githubusercontent.com/pomdtr/smallweb/refs/heads/main/schemas/config.schema.json",
+  "domain": "just-be.cloud",
+  "additionalDomains": ["just-be.localhost"]
 }
