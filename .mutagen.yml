@@ -1,0 +1,14 @@
+sync:
+  defaults:
+    mode: two-way-resolved
+    ignore:
+      paths:
+        - .git
+        - .DS_Store
+        - node_modules
+        - "*.log"
+        - .env
+        - .mutagen.yml
+  smallweb:
+    alpha: "root@just-be.cloud:/root/smallweb"
+    beta: "."

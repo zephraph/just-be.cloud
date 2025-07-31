@@ -1,0 +1,4 @@
+{
+  "patch": ["../alchemy/alchemy"],
+  "nodeModulesDir": "auto"
+}

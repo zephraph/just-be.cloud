@@ -4,11 +4,15 @@
 # Don't ignore dotfiles
 !.*
 !.*/**/*
+.env
 !mise.toml
 !app.yaml
 !docker-compose.yml
 !Dockerfile
 !*.md
 !*.sh
+!alchemy.run.ts
+!deno.json
+!deno.lock
 
 .claude/*.local.json

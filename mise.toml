@@ -1,5 +1,9 @@
 [tools]
+"aqua:mutagen-io/mutagen" = "0.18.1"
 deno = "2.4.2"
+
+[env]
+_.file = ".env"
 
 [tasks.start]
 run = "smallweb up"
@@ -14,7 +18,7 @@ run = "docker-compose down"
 
 [tasks.deploy]
 description = "Deploy to DigitalOcean Droplet"
-run = "./deploy.sh"
+run = "deno run -A alchemy.run.ts"
 
 [tasks."deploy:ssh"]
 description = "SSH into the deployment droplet"

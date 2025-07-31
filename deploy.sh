@@ -2,13 +2,6 @@
 
 set -e
 
-DROPLET_NAME="smallweb"
-DOMAIN="just-be.cloud"
-SSH_KEY_NAME="default"
-REGION="nyc3"
-SIZE="s-1vcpu-1gb"
-IMAGE="docker-20-04"
-
 echo "🚀 Deploying Smallweb to DigitalOcean Droplet..."
 
 # Check if droplet already exists
@@ -16,7 +9,7 @@ DROPLET_ID=$(doctl compute droplet list --format ID,Name --no-header | grep -w "
 
 if [ -z "$DROPLET_ID" ]; then
   echo "📦 Creating new droplet..."
-  
+
   # Create droplet with Docker pre-installed
   DROPLET_ID=$(doctl compute droplet create "$DROPLET_NAME" \
     --image "$IMAGE" \
@@ -26,7 +19,7 @@ if [ -z "$DROPLET_ID" ]; then
     --wait \
     --format ID \
     --no-header)
-  
+
   echo "✅ Droplet created with ID: $DROPLET_ID"
 else
   echo "🔄 Using existing droplet ID: $DROPLET_ID"
@@ -44,7 +37,7 @@ sleep 30
 echo "📤 Deploying code to droplet..."
 
 # Create deployment script
-cat > /tmp/deploy_remote.sh << 'EOF'
+cat > /tmp/deploy_remote.sh << EOF
 #!/bin/bash
 set -e
 
@@ -54,7 +47,7 @@ docker rm smallweb || true
 
 # Pull latest code (assuming you'll push to a git repo)
 if [ ! -d "/root/smallweb" ]; then
-  git clone https://github.com/zephraph/smallweb.git /root/smallweb
+  git clone https://github.com/${GITHUB_REPO}.git /root/smallweb
 else
   cd /root/smallweb && git pull
 fi
@@ -68,7 +61,7 @@ docker run -d \
   --restart unless-stopped \
   -p 80:7777 \
   -p 443:7777 \
-  -e SMALLWEB_DOMAIN=just-be.cloud \
+  -e SMALLWEB_DOMAIN=${DOMAIN} \
   smallweb
 
 echo "🎉 Smallweb is running!"
@@ -76,8 +69,8 @@ docker ps | grep smallweb
 EOF
 
 # Copy and execute deployment script
-scp -o StrictHostKeyChecking=no /tmp/deploy_remote.sh root@$DROPLET_IP:/tmp/
-ssh -o StrictHostKeyChecking=no root@$DROPLET_IP 'chmod +x /tmp/deploy_remote.sh && /tmp/deploy_remote.sh'
+scp -o StrictHostKeyChecking=no -i ${SSH_KEY_PATH} /tmp/deploy_remote.sh root@$DROPLET_IP:/tmp/
+ssh -o StrictHostKeyChecking=no -i ${SSH_KEY_PATH} root@$DROPLET_IP 'chmod +x /tmp/deploy_remote.sh && /tmp/deploy_remote.sh'
 
 # Clean up
 rm /tmp/deploy_remote.sh
