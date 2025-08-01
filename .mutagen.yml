@@ -10,5 +10,5 @@ sync:
         - .env
         - .mutagen.yml
   smallweb:
-    alpha: "root@just-be.cloud:/root/smallweb"
+    alpha: "root@just-be.cloud:/home/smallweb"
     beta: "."
