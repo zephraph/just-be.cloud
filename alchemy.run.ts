@@ -5,13 +5,12 @@ import { Exec } from "npm:alchemy/os";
 const app = await alchemy("just-be.cloud");
 
 await Exec("deploy", {
-  command: "bash ./deploy.sh",
+  command: "bash ./.scripts/deploy.sh",
 });
 
 // Get droplet IP with a separate command
 const getDropletIP = await Exec("get-droplet-ip", {
-  command:
-    "doctl compute droplet list --format Name,PublicIPv4 --no-header | grep smallweb | awk '{print $2}'",
+  command: "mise run get-ip",
   inheritStdio: false,
 });
 

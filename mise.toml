@@ -16,6 +16,12 @@ run = "docker-compose up --build"
 description = "Stop and remove docker containers"
 run = "docker-compose down"
 
+[tasks."get-ip"]
+description = "Get the IP address of the smallweb droplet"
+run = """
+doctl compute droplet list --format Name,PublicIPv4 --no-header | grep smallweb | awk '{print $2}'
+"""
+
 [tasks.deploy]
 description = "Deploy to DigitalOcean Droplet"
 run = "deno run -A alchemy.run.ts"
@@ -23,33 +29,33 @@ run = "deno run -A alchemy.run.ts"
 [tasks."deploy:ssh"]
 description = "SSH into the deployment droplet"
 run = """
-DROPLET_IP=$(doctl compute droplet list --format Name,PublicIPv4 --no-header | grep smallweb | awk '{print $2}')
+DROPLET_IP=$(mise run get-ip)
 if [ -z "$DROPLET_IP" ]; then
   echo "❌ No smallweb droplet found. Run 'mise run deploy' first."
   exit 1
 fi
-ssh root@$DROPLET_IP
+ssh -i ${SSH_KEY_PATH} root@$DROPLET_IP
 """
 
-[tasks."deploy:logs"]
+[tasks.logs]
 description = "View deployment logs"
 run = """
-DROPLET_IP=$(doctl compute droplet list --format Name,PublicIPv4 --no-header | grep smallweb | awk '{print $2}')
+DROPLET_IP=$(mise run get-ip)
 if [ -z "$DROPLET_IP" ]; then
   echo "❌ No smallweb droplet found. Run 'mise run deploy' first."
   exit 1
 fi
-ssh root@$DROPLET_IP 'docker logs -f smallweb'
+ssh -i ${SSH_KEY_PATH} root@$DROPLET_IP 'docker logs -f smallweb'
 """
 
 [tasks."deploy:status"]
 description = "Check deployment status"
 run = """
-DROPLET_IP=$(doctl compute droplet list --format Name,PublicIPv4 --no-header | grep smallweb | awk '{print $2}')
+DROPLET_IP=$(mise run get-ip)
 if [ -z "$DROPLET_IP" ]; then
   echo "❌ No smallweb droplet found. Run 'mise run deploy' first."
   exit 1
 fi
 echo "🖥️  Droplet IP: $DROPLET_IP"
-ssh root@$DROPLET_IP 'docker ps | grep smallweb || echo "❌ Container not running"'
+ssh -i ${SSH_KEY_PATH} root@$DROPLET_IP 'docker ps | grep smallweb || echo "❌ Container not running"'
 """
