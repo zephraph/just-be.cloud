@@ -17,3 +17,4 @@
 !deno.lock
 
 .claude/*.local.json
+.conductor
