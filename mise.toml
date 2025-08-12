@@ -1,5 +1,4 @@
 [tools]
-"aqua:mutagen-io/mutagen" = "0.18.1"
 deno = "2.4.2"
 
 [env]
@@ -26,7 +25,7 @@ doctl compute droplet list --format Name,PublicIPv4 --no-header | grep smallweb 
 description = "Deploy to DigitalOcean Droplet"
 run = "deno run -A alchemy.run.ts"
 
-[tasks."deploy:ssh"]
+[tasks.ssh]
 description = "SSH into the deployment droplet"
 run = """
 DROPLET_IP=$(mise run get-ip)
@@ -58,4 +57,25 @@ if [ -z "$DROPLET_IP" ]; then
 fi
 echo "🖥️  Droplet IP: $DROPLET_IP"
 ssh -i ${SSH_KEY_PATH} root@$DROPLET_IP 'docker ps | grep smallweb || echo "❌ Container not running"'
+"""
+
+[tasks.sync]
+description = "Sync local files to Smallweb server"
+run = """
+echo "🔄 Syncing files to Smallweb server..."
+
+# Get server IP
+DROPLET_IP=$(mise run get-ip)
+
+# Sync files using rsync through root SSH access
+rsync -avz --delete \
+  --exclude='.git' \
+  --exclude='.DS_Store' \
+  --exclude='node_modules' \
+  --exclude='*.log' \
+  --exclude='.env' \
+  -e "ssh -i ${SSH_KEY_PATH}" \
+  ./ root@$DROPLET_IP:/opt/docker/smallweb/data/
+
+echo "✅ Sync complete!"
 """

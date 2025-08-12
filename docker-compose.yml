@@ -1,8 +1,9 @@
 services:
   smallweb:
     image: ghcr.io/pomdtr/smallweb:latest
+    container_name: smallweb
     restart: unless-stopped
-    command: up --enable-crons --ssh-addr :2222 --smtp-addr :25 --ssh-private-key /run/secrets/ssh_private_key --on-demand-tls
+    command: up --enable-crons --ssh-addr :2222 --smtp-addr :25 --ssh-private-key /run/secrets/ssh_private_key --on-demand-tls --domain just-be.cloud
     secrets:
       - ssh_private_key
     ports:
